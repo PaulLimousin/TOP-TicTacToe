@@ -1,32 +1,43 @@
 "use strict";
 
 // Players
-const Player = (playerNumber, avatar) => {
+const Player = (playerNumber) => {
+  let _avatar = "";
   const getPlayerNumber = () => {
     return playerNumber;
   };
+  const setPlayerAvatar = (avatar) => {
+    _avatar = avatar;
+  };
   const getPlayerAvatar = () => {
-    return avatar;
+    return _avatar;
   };
 
-  return { getPlayerNumber, getPlayerAvatar };
+  return { getPlayerNumber, setPlayerAvatar, getPlayerAvatar };
 };
 
 // Gameboard
 const gameBoard = (() => {
   const _board = ["", "", "", "", "", "", "", "", ""];
-  const player1 = Player("player1", "knight");
-  const player2 = Player("player2", "wizard");
+  const player1 = Player("player1");
+  const player2 = Player("player2");
   let winnerIs = "";
   let _playerTurn = player1.getPlayerNumber();
 
   const _searchWinnerInArrayGameBoard = (number1, number2, number3) => {
     if (
-      (_board[number1] === _board[number2]) &
-      (_board[number2] === _board[number3]) &
-      (_board[number1] === _board[number3])
+      (_board[number1] != "") &
+      (_board[number2] != "") &
+      (_board[number3] != "")
     ) {
-      winnerIs = _board[number1];
+      if (
+        (_board[number1] === _board[number2]) &
+        (_board[number2] === _board[number3]) &
+        (_board[number1] === _board[number3])
+      ) {
+        winnerIs = _board[number1];
+        console.log(winnerIs);
+      }
     }
   };
 
@@ -61,6 +72,7 @@ const gameBoard = (() => {
       _board[i] = "";
       winnerIs = "";
     }
+    setPlayerTurn("player1");
   };
   return {
     player1,
@@ -78,21 +90,26 @@ const gameBoard = (() => {
 // Display Controller
 const displayController = (() => {
   const _boxes = document.querySelectorAll(".box");
-  const replayButton = document.querySelector("#replayButton");
-  const introContainer = document.querySelector("#introContainer");
-  const soloButton = document.querySelector("#soloButton");
-  const multiButton = document.querySelector("#multiButton");
-  const gameContainer = document.querySelector("#gameContainer");
+  const _gameModeChoiceContainer = document.querySelector(
+    "#gameModeChoiceContainer"
+  );
+  const _soloButton = document.querySelector("#soloButton");
+  const _multiButton = document.querySelector("#multiButton");
+  const _multiplayerAvatarChoiceContainer = document.querySelector(
+    "#multiplayerAvatarChoiceContainer"
+  );
+  const _avatarChoicesPlayer1 = document.querySelectorAll(
+    ".avatarChoicePlayer1"
+  );
+  const _avatarChoicesPlayer2 = document.querySelectorAll(
+    ".avatarChoicePlayer2"
+  );
+  const _confirmAvatarChoiceButton = document.querySelector(
+    "#confirmAvatarChoiceButton"
+  );
+  const _gameContainer = document.querySelector("#gameContainer");
+  const _replayButton = document.querySelector("#replayButton");
 
-  const _displayMultiGameBoard = () => {
-    introContainer.classList.add("notDisplay");
-    gameContainer.classList.remove("notDisplay");
-  };
-  // const _updateGameBoardDisplay = () => {
-  //   for (let i = 0; i < _boxes.length; i++) {
-  //     _boxes[i].textContent = gameBoard.getBoardValues(i);
-  //   }
-  // };
   const _updateGameBoardDisplay = (index) => {
     if (gameBoard.getBoardValues(index) === "player1") {
       const playerAvatar = document.createElement("img");
@@ -131,30 +148,78 @@ const displayController = (() => {
       }
     }
   };
-  multiButton.addEventListener("click", () => {
-    _displayMultiGameBoard();
-  });
-  for (let i = 0; i < _boxes.length; i++) {
-    _boxes[i].addEventListener("click", () => {
-      if (
-        gameBoard.getBoardValues(_boxes[i].dataset.index) !== "" ||
-        gameBoard.getWInnerIs() !== ""
-      ) {
-        return;
-      }
-      let index = _boxes[i].dataset.index;
-      if (gameBoard.getPlayerTurn() === "player1") {
-        gameBoard.setBoardValues(index, "player1");
-        gameBoard.setPlayerTurn(gameBoard.player2.getPlayerNumber());
-      } else {
-        gameBoard.setBoardValues(index, "player2");
-        gameBoard.setPlayerTurn(gameBoard.player1.getPlayerNumber());
-      }
-      _updateGameBoardDisplay(_boxes[i].dataset.index);
+  const _listenersSettings = () => {
+    _multiButton.addEventListener("click", () => {
+      _gameModeChoiceContainer.classList.add("notDisplay");
+      _multiplayerAvatarChoiceContainer.classList.remove("notDisplay");
     });
-  }
-  replayButton.addEventListener("click", () => {
-    gameBoard.resetGame();
-    _refreshGameBoardDisplay();
-  });
+    for (let i = 0; i < _avatarChoicesPlayer1.length; i++) {
+      _avatarChoicesPlayer1[i].addEventListener("click", () => {
+        if (
+          _avatarChoicesPlayer1[i].dataset.avatar ===
+          gameBoard.player2.getPlayerAvatar()
+        ) {
+          return;
+        }
+        for (let i = 0; i < _avatarChoicesPlayer1.length; i++) {
+          _avatarChoicesPlayer1[i].classList.remove("selectedPlayer1");
+          _avatarChoicesPlayer1[i].classList.add("notSelected");
+        }
+        _avatarChoicesPlayer1[i].classList.add("selectedPlayer1");
+        _avatarChoicesPlayer1[i].classList.remove("notSelected");
+        gameBoard.player1.setPlayerAvatar(
+          _avatarChoicesPlayer1[i].dataset.avatar
+        );
+      });
+    }
+    for (let i = 0; i < _avatarChoicesPlayer2.length; i++) {
+      _avatarChoicesPlayer2[i].addEventListener("click", () => {
+        if (
+          _avatarChoicesPlayer2[i].dataset.avatar ===
+          gameBoard.player1.getPlayerAvatar()
+        ) {
+          return;
+        }
+        for (let i = 0; i < _avatarChoicesPlayer2.length; i++) {
+          _avatarChoicesPlayer2[i].classList.remove("selectedPlayer2");
+          _avatarChoicesPlayer2[i].classList.add("notSelected");
+        }
+        _avatarChoicesPlayer2[i].classList.add("selectedPlayer2");
+        _avatarChoicesPlayer2[i].classList.remove("notSelected");
+        gameBoard.player2.setPlayerAvatar(
+          _avatarChoicesPlayer2[i].dataset.avatar
+        );
+      });
+    }
+    _confirmAvatarChoiceButton.addEventListener("click", () => {
+      _multiplayerAvatarChoiceContainer.classList.add("notDisplay");
+      _gameContainer.classList.remove("notDisplay");
+    });
+    for (let i = 0; i < _boxes.length; i++) {
+      _boxes[i].addEventListener("click", () => {
+        if (
+          gameBoard.getBoardValues(_boxes[i].dataset.index) !== "" ||
+          gameBoard.getWInnerIs() !== ""
+        ) {
+          return;
+        }
+        let index = _boxes[i].dataset.index;
+        if (gameBoard.getPlayerTurn() === "player1") {
+          gameBoard.setBoardValues(index, "player1");
+          gameBoard.setPlayerTurn(gameBoard.player2.getPlayerNumber());
+        } else {
+          gameBoard.setBoardValues(index, "player2");
+          gameBoard.setPlayerTurn(gameBoard.player1.getPlayerNumber());
+        }
+        _updateGameBoardDisplay(_boxes[i].dataset.index);
+
+        gameBoard.checkForAWinner();
+      });
+    }
+    _replayButton.addEventListener("click", () => {
+      gameBoard.resetGame();
+      _refreshGameBoardDisplay();
+    });
+  };
+  _listenersSettings();
 })();

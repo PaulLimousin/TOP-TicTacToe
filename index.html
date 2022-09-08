@@ -13,7 +13,7 @@
   <body>
     <header></header>
     <main>
-      <section id="introContainer">
+      <section id="gameModeChoiceContainer">
         <h1>Tic Tac Toe</h1>
         <p>
           Veuillez choisir votre mode de jeux : En solo contre l'ordinateur ou
@@ -21,6 +21,50 @@
         </p>
         <button id="soloButton">Solo</button
         ><button id="multiButton">Multijoueur</button>
+      </section>
+      <section id="multiplayerAvatarChoiceContainer" class="notDisplay">
+        <h1>Choix des avatars</h1>
+        <div id="multiAvatarChoice">
+          <h2>Joueur 1</h2>
+          <h2>Joueur 2</h2>
+          <img
+            src="images/knight.png"
+            alt="Image d'un chevalier"
+            class="avatarChoicePlayer1"
+            data-avatar="knight"
+          />
+          <img
+            src="images/wizard.png"
+            alt="Image d'un mage"
+            class="avatarChoicePlayer1"
+            data-avatar="wizard"
+          />
+          <img
+            src="images/bowman.png"
+            alt="Image d'un archer"
+            class="avatarChoicePlayer1"
+            data-avatar="bowman"
+          />
+          <img
+            src="images/bowman.png"
+            alt="Image d'un archer"
+            class="avatarChoicePlayer2"
+            data-avatar="bowman"
+          />
+          <img
+            src="images/wizard.png"
+            alt="Image d'un mage"
+            class="avatarChoicePlayer2"
+            data-avatar="wizard"
+          />
+          <img
+            src="images/knight.png"
+            alt="Image d'un chevalier"
+            class="avatarChoicePlayer2"
+            data-avatar="knight"
+          />
+        </div>
+        <button id="confirmAvatarChoiceButton">Confirmer</button>
       </section>
       <section id="gameContainer" class="notDisplay">
         <div id="gameBoardContainer">

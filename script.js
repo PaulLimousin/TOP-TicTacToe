@@ -1,20 +1,24 @@
 "use strict";
 
 // Players
-const Player = (sign) => {
-  const getSign = () => {
-    return sign;
+const Player = (playerNumber, avatar) => {
+  const getPlayerNumber = () => {
+    return playerNumber;
   };
-  return { getSign };
+  const getPlayerAvatar = () => {
+    return avatar;
+  };
+
+  return { getPlayerNumber, getPlayerAvatar };
 };
 
 // Gameboard
 const gameBoard = (() => {
   const _board = ["", "", "", "", "", "", "", "", ""];
-  const player1 = Player("x");
-  const player2 = Player("o");
+  const player1 = Player("player1", "knight");
+  const player2 = Player("player2", "wizard");
   let winnerIs = "";
-  let _playerTurn = player1.getSign();
+  let _playerTurn = player1.getPlayerNumber();
 
   const _searchWinnerInArrayGameBoard = (number1, number2, number3) => {
     if (
@@ -84,9 +88,40 @@ const displayController = (() => {
     introContainer.classList.add("notDisplay");
     gameContainer.classList.remove("notDisplay");
   };
-  const _updateGameBoardDisplay = () => {
-    for (let i = 0; i < _boxes.length; i++) {
-      _boxes[i].textContent = gameBoard.getBoardValues(i);
+  // const _updateGameBoardDisplay = () => {
+  //   for (let i = 0; i < _boxes.length; i++) {
+  //     _boxes[i].textContent = gameBoard.getBoardValues(i);
+  //   }
+  // };
+  const _updateGameBoardDisplay = (index) => {
+    if (gameBoard.getBoardValues(index) === "player1") {
+      const playerAvatar = document.createElement("img");
+      playerAvatar.classList.add("avatarImage");
+      switch (gameBoard.player1.getPlayerAvatar()) {
+        case "knight":
+          playerAvatar.setAttribute("src", "images/knight.png");
+          break;
+        case "wizard":
+          playerAvatar.setAttribute("src", "images/wizard.png");
+          break;
+        case "bowman":
+          playerAvatar.setAttribute("src", "images/bowman.png");
+      }
+      _boxes[index].appendChild(playerAvatar);
+    } else if (gameBoard.getBoardValues(index) === "player2") {
+      const playerAvatar = document.createElement("img");
+      playerAvatar.classList.add("avatarImage");
+      switch (gameBoard.player2.getPlayerAvatar()) {
+        case "knight":
+          playerAvatar.setAttribute("src", "images/knight.png");
+          break;
+        case "wizard":
+          playerAvatar.setAttribute("src", "images/wizard.png");
+          break;
+        case "bowman":
+          playerAvatar.setAttribute("src", "images/bowman.png");
+      }
+      _boxes[index].appendChild(playerAvatar);
     }
   };
 
@@ -102,15 +137,14 @@ const displayController = (() => {
         return;
       }
       let index = _boxes[i].dataset.index;
-      if (gameBoard.getPlayerTurn() === "x") {
-        gameBoard.setBoardValues(index, "x");
-        gameBoard.setPlayerTurn(gameBoard.player2.getSign());
+      if (gameBoard.getPlayerTurn() === "player1") {
+        gameBoard.setBoardValues(index, "player1");
+        gameBoard.setPlayerTurn(gameBoard.player2.getPlayerNumber());
       } else {
-        gameBoard.setBoardValues(index, "o");
-        gameBoard.setPlayerTurn(gameBoard.player1.getSign());
+        gameBoard.setBoardValues(index, "player2");
+        gameBoard.setPlayerTurn(gameBoard.player1.getPlayerNumber());
       }
-      _updateGameBoardDisplay();
-      console.log(gameBoard.checkForAWinner());
+      _updateGameBoardDisplay(_boxes[i].dataset.index);
     });
   }
   replayButton.addEventListener("click", () => {

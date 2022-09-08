@@ -18,3 +18,6 @@
 .notDisplay {
   display: none;
 }
+.avatarImage {
+  width: 100px;
+}

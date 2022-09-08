@@ -124,7 +124,13 @@ const displayController = (() => {
       _boxes[index].appendChild(playerAvatar);
     }
   };
-
+  const _refreshGameBoardDisplay = () => {
+    for (let i = 0; i < _boxes.length; i++) {
+      if (_boxes[i].lastChild != null) {
+        _boxes[i].lastChild.remove();
+      }
+    }
+  };
   multiButton.addEventListener("click", () => {
     _displayMultiGameBoard();
   });
@@ -149,6 +155,6 @@ const displayController = (() => {
   }
   replayButton.addEventListener("click", () => {
     gameBoard.resetGame();
-    _updateGameBoardDisplay();
+    _refreshGameBoardDisplay();
   });
 })();

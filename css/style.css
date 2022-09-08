@@ -1,0 +1,20 @@
+#gameBoardContainer {
+  width: 300px;
+  height: 300px;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+}
+.box {
+  width: 98px;
+  height: 98px;
+  border: 1px solid black;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 50px;
+}
+.notDisplay {
+  display: none;
+}

@@ -18,12 +18,22 @@ const Player = (playerNumber) => {
 
 // Gameboard
 const gameBoard = (() => {
-  const _board = ["", "", "", "", "", "", "", "", ""];
   const player1 = Player("player1");
   const player2 = Player("player2");
-  let winnerIs = "";
+  const _board = ["", "", "", "", "", "", "", "", ""];
+  let _gameMode = "";
+  let _winnerIs = "";
+  let _winnerBoxes = [];
   let _playerTurn = player1.getPlayerNumber();
 
+  const _setWinnerBoxes = (number1, number2, number3) => {
+    _winnerBoxes.push(number1);
+    _winnerBoxes.push(number2);
+    _winnerBoxes.push(number3);
+  };
+  const getWinnerBoxes = () => {
+    return _winnerBoxes;
+  };
   const _searchWinnerInArrayGameBoard = (number1, number2, number3) => {
     if (
       (_board[number1] != "") &
@@ -35,12 +45,17 @@ const gameBoard = (() => {
         (_board[number2] === _board[number3]) &
         (_board[number1] === _board[number3])
       ) {
-        winnerIs = _board[number1];
-        console.log(winnerIs);
+        _winnerIs = _board[number1];
+        _setWinnerBoxes(number1, number2, number3);
       }
     }
   };
-
+  const setGameMode = (mode) => {
+    _gameMode = mode;
+  };
+  const getGameMode = () => {
+    return _gameMode;
+  };
   const getBoardValues = (index) => {
     return _board[index];
   };
@@ -53,6 +68,57 @@ const gameBoard = (() => {
   const setPlayerTurn = (player) => {
     _playerTurn = player;
   };
+  const playSoloTurn = (i) => {
+    if (
+      getBoardValues(displayController.getBoxes()[i].dataset.index) !== "" ||
+      getWInnerIs() !== ""
+    ) {
+      return;
+    }
+    let index = displayController.getBoxes()[i].dataset.index;
+    setBoardValues(index, "player1");
+    setPlayerTurn(player2.getPlayerNumber());
+    displayController.updateGameBoardDisplay(
+      displayController.getBoxes()[i].dataset.index
+    );
+
+    setTimeout(() => {
+      let computerChoice = computerPlay();
+      setBoardValues(computerChoice, "player2");
+      setPlayerTurn(player1.getPlayerNumber());
+      displayController.updateGameBoardDisplay(computerChoice);
+      checkForAWinner();
+      if (getWInnerIs() != "") {
+        setTimeout(displayController.displayWinnerContent, 200);
+      }
+    }, 2000);
+  };
+  const playMultiplayerTurn = (i) => {
+    if (
+      getBoardValues(displayController.getBoxes()[i].dataset.index) !== "" ||
+      getWInnerIs() !== ""
+    ) {
+      return;
+    }
+    let index = displayController.getBoxes()[i].dataset.index;
+    if (getPlayerTurn() === "player1") {
+      setBoardValues(index, "player1");
+      setPlayerTurn(player2.getPlayerNumber());
+    } else {
+      setBoardValues(index, "player2");
+      setPlayerTurn(player1.getPlayerNumber());
+    }
+    displayController.updateGameBoardDisplay(
+      displayController.getBoxes()[i].dataset.index
+    );
+    checkForAWinner();
+    if (getWInnerIs() != "") {
+      setTimeout(displayController.displayWinnerContent, 200);
+    }
+  };
+  const computerPlay = () => {
+    return 0;
+  };
   const checkForAWinner = () => {
     _searchWinnerInArrayGameBoard(0, 1, 2);
     _searchWinnerInArrayGameBoard(3, 4, 5);
@@ -62,27 +128,40 @@ const gameBoard = (() => {
     _searchWinnerInArrayGameBoard(2, 5, 8);
     _searchWinnerInArrayGameBoard(0, 4, 8);
     _searchWinnerInArrayGameBoard(2, 4, 6);
-    return winnerIs;
+    return _winnerIs;
   };
   const getWInnerIs = () => {
-    return winnerIs;
+    return _winnerIs;
   };
-  const resetGame = () => {
+  const replayGame = () => {
     for (let i = 0; i < _board.length; i++) {
       _board[i] = "";
-      winnerIs = "";
     }
+    _winnerIs = "";
+    _winnerBoxes = [];
     setPlayerTurn("player1");
+  };
+  const resetGame = () => {
+    replayGame();
+    player1.setPlayerAvatar("");
+    player2.setPlayerAvatar("");
+    setGameMode("");
   };
   return {
     player1,
     player2,
+    setGameMode,
+    getGameMode,
     getBoardValues,
     setBoardValues,
     getPlayerTurn,
     setPlayerTurn,
+    getWinnerBoxes,
+    playMultiplayerTurn,
+    playSoloTurn,
     checkForAWinner,
     getWInnerIs,
+    replayGame,
     resetGame,
   };
 })();
@@ -90,13 +169,8 @@ const gameBoard = (() => {
 // Display Controller
 const displayController = (() => {
   const _boxes = document.querySelectorAll(".box");
-  const _gameModeChoiceContainer = document.querySelector(
-    "#gameModeChoiceContainer"
-  );
-  const _soloButton = document.querySelector("#soloButton");
-  const _multiButton = document.querySelector("#multiButton");
-  const _multiplayerAvatarChoiceContainer = document.querySelector(
-    "#multiplayerAvatarChoiceContainer"
+  const _avatarSelectionContainer = document.querySelector(
+    ".avatarSelectionContainer"
   );
   const _avatarChoicesPlayer1 = document.querySelectorAll(
     ".avatarChoicePlayer1"
@@ -104,13 +178,19 @@ const displayController = (() => {
   const _avatarChoicesPlayer2 = document.querySelectorAll(
     ".avatarChoicePlayer2"
   );
+  const _soloButton = document.querySelector("#soloButton");
+  const _multiButton = document.querySelector("#multiButton");
   const _confirmAvatarChoiceButton = document.querySelector(
     "#confirmAvatarChoiceButton"
   );
   const _gameContainer = document.querySelector("#gameContainer");
   const _replayButton = document.querySelector("#replayButton");
+  const _resetButton = document.querySelector("#_resetButton");
 
-  const _updateGameBoardDisplay = (index) => {
+  const getBoxes = () => {
+    return _boxes;
+  };
+  const updateGameBoardDisplay = (index) => {
     if (gameBoard.getBoardValues(index) === "player1") {
       const playerAvatar = document.createElement("img");
       playerAvatar.classList.add("avatarImage");
@@ -141,6 +221,13 @@ const displayController = (() => {
       _boxes[index].appendChild(playerAvatar);
     }
   };
+
+  const displayWinnerContent = () => {
+    let winnerBoxes = gameBoard.getWinnerBoxes();
+    for (let i = 0; i < 3; i++) {
+      _boxes[winnerBoxes[i]].lastChild.classList.add("winImage");
+    }
+  };
   const _refreshGameBoardDisplay = () => {
     for (let i = 0; i < _boxes.length; i++) {
       if (_boxes[i].lastChild != null) {
@@ -149,10 +236,6 @@ const displayController = (() => {
     }
   };
   const _listenersSettings = () => {
-    _multiButton.addEventListener("click", () => {
-      _gameModeChoiceContainer.classList.add("notDisplay");
-      _multiplayerAvatarChoiceContainer.classList.remove("notDisplay");
-    });
     for (let i = 0; i < _avatarChoicesPlayer1.length; i++) {
       _avatarChoicesPlayer1[i].addEventListener("click", () => {
         if (
@@ -191,35 +274,65 @@ const displayController = (() => {
         );
       });
     }
+    _soloButton.addEventListener("click", () => {
+      gameBoard.setGameMode("solo");
+      _soloButton.classList.remove("notSelected");
+      _soloButton.classList.add("gameModeButtonSelected");
+      _multiButton.classList.remove("gameModeButtonSelected");
+      _multiButton.classList.add("notSelected");
+    });
+    _multiButton.addEventListener("click", () => {
+      gameBoard.setGameMode("multi");
+      _multiButton.classList.remove("notSelected");
+      _multiButton.classList.add("gameModeButtonSelected");
+      _soloButton.classList.remove("gameModeButtonSelected");
+      _soloButton.classList.add("notSelected");
+    });
     _confirmAvatarChoiceButton.addEventListener("click", () => {
-      _multiplayerAvatarChoiceContainer.classList.add("notDisplay");
-      _gameContainer.classList.remove("notDisplay");
+      if (
+        gameBoard.player1.getPlayerAvatar() != "" &&
+        gameBoard.player2.getPlayerAvatar() != "" &&
+        gameBoard.getGameMode() != ""
+      ) {
+        _avatarSelectionContainer.classList.add("notDisplay");
+        _gameContainer.classList.remove("notDisplay");
+      }
     });
     for (let i = 0; i < _boxes.length; i++) {
       _boxes[i].addEventListener("click", () => {
-        if (
-          gameBoard.getBoardValues(_boxes[i].dataset.index) !== "" ||
-          gameBoard.getWInnerIs() !== ""
-        ) {
-          return;
+        if (gameBoard.getGameMode() === "solo") {
+          if (gameBoard.getPlayerTurn() === "player2") {
+            return;
+          }
+          gameBoard.playSoloTurn(i);
+        } else if (gameBoard.getGameMode() === "multi") {
+          gameBoard.playMultiplayerTurn(i);
         }
-        let index = _boxes[i].dataset.index;
-        if (gameBoard.getPlayerTurn() === "player1") {
-          gameBoard.setBoardValues(index, "player1");
-          gameBoard.setPlayerTurn(gameBoard.player2.getPlayerNumber());
-        } else {
-          gameBoard.setBoardValues(index, "player2");
-          gameBoard.setPlayerTurn(gameBoard.player1.getPlayerNumber());
-        }
-        _updateGameBoardDisplay(_boxes[i].dataset.index);
-
-        gameBoard.checkForAWinner();
       });
     }
     _replayButton.addEventListener("click", () => {
+      gameBoard.replayGame();
+      _refreshGameBoardDisplay();
+    });
+    _resetButton.addEventListener("click", () => {
       gameBoard.resetGame();
+      _gameContainer.classList.add("notDisplay");
+      _avatarSelectionContainer.classList.remove("notDisplay");
+      for (let i = 0; i < _avatarChoicesPlayer1.length; i++) {
+        _avatarChoicesPlayer1[i].classList.remove("selectedPlayer1");
+        _avatarChoicesPlayer1[i].classList.remove("notSelected");
+      }
+      for (let i = 0; i < _avatarChoicesPlayer2.length; i++) {
+        _avatarChoicesPlayer2[i].classList.remove("selectedPlayer2");
+        _avatarChoicesPlayer2[i].classList.remove("notSelected");
+      }
+      _soloButton.classList.remove("notSelected");
+      _soloButton.classList.remove("gameModeButtonSelected");
+      _multiButton.classList.remove("gameModeButtonSelected");
+      _multiButton.classList.remove("notSelected");
       _refreshGameBoardDisplay();
     });
   };
   _listenersSettings();
+  return { getBoxes, updateGameBoardDisplay, displayWinnerContent };
 })();

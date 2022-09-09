@@ -13,58 +13,61 @@
   <body>
     <header></header>
     <main>
-      <section id="gameModeChoiceContainer">
+      <section class="avatarSelectionContainer">
         <h1>Tic Tac Toe</h1>
-        <p>
-          Veuillez choisir votre mode de jeux : En solo contre l'ordinateur ou
-          en multijoueur pour jouer contre un ami sur le même écran !
-        </p>
-        <button id="soloButton">Solo</button
-        ><button id="multiButton">Multijoueur</button>
-      </section>
-      <section id="multiplayerAvatarChoiceContainer" class="notDisplay">
-        <h1>Choix des avatars</h1>
-        <div id="multiAvatarChoice">
-          <h2>Joueur 1</h2>
-          <h2>Joueur 2</h2>
-          <img
-            src="images/knight.png"
-            alt="Image d'un chevalier"
-            class="avatarChoicePlayer1"
-            data-avatar="knight"
-          />
-          <img
-            src="images/wizard.png"
-            alt="Image d'un mage"
-            class="avatarChoicePlayer1"
-            data-avatar="wizard"
-          />
-          <img
-            src="images/bowman.png"
-            alt="Image d'un archer"
-            class="avatarChoicePlayer1"
-            data-avatar="bowman"
-          />
-          <img
-            src="images/bowman.png"
-            alt="Image d'un archer"
-            class="avatarChoicePlayer2"
-            data-avatar="bowman"
-          />
-          <img
-            src="images/wizard.png"
-            alt="Image d'un mage"
-            class="avatarChoicePlayer2"
-            data-avatar="wizard"
-          />
-          <img
-            src="images/knight.png"
-            alt="Image d'un chevalier"
-            class="avatarChoicePlayer2"
-            data-avatar="knight"
-          />
+        <div class="playerChoiceContainer">
+          <h2 class="player1">Joueur 1</h2>
+          <h2 class="player2">Joueur 2</h2>
         </div>
-        <button id="confirmAvatarChoiceButton">Confirmer</button>
+        <div class="avatarChoiceContainer">
+          <div>
+            <img
+              src="images/knight.png"
+              alt="Image d'un chevalier"
+              class="avatarChoicePlayer1"
+              data-avatar="knight"
+            />
+            <img
+              src="images/wizard.png"
+              alt="Image d'un mage"
+              class="avatarChoicePlayer1"
+              data-avatar="wizard"
+            />
+            <img
+              src="images/bowman.png"
+              alt="Image d'un archer"
+              class="avatarChoicePlayer1"
+              data-avatar="bowman"
+            />
+          </div>
+          <div>
+            <img
+              src="images/bowman.png"
+              alt="Image d'un archer"
+              class="avatarChoicePlayer2"
+              data-avatar="bowman"
+            />
+            <img
+              src="images/wizard.png"
+              alt="Image d'un mage"
+              class="avatarChoicePlayer2"
+              data-avatar="wizard"
+            />
+            <img
+              src="images/knight.png"
+              alt="Image d'un chevalier"
+              class="avatarChoicePlayer2"
+              data-avatar="knight"
+            />
+          </div>
+        </div>
+        <div class="gameModeChoice">
+          <button id="soloButton" class="gameModeButton">Solo</button>
+          <button id="multiButton" class="gameModeButton">Multijoueur</button>
+        </div>
+        <div class="confirmAvatarChoiceButtonContainer">
+          <button id="confirmAvatarChoiceButton">Jouer</button>
+        </div>
       </section>
       <section id="gameContainer" class="notDisplay">
         <div id="gameBoardContainer">
@@ -78,7 +81,10 @@
           <div class="box" data-index="7"></div>
           <div class="box" data-index="8"></div>
         </div>
-        <button id="replayButton">Rejouer</button>
+        <div id="inGameButtonsContainer">
+          <button id="replayButton">Rejouer</button>
+          <button id="_resetButton">Quitter</button>
+        </div>
       </section>
     </main>
     <footer></footer>

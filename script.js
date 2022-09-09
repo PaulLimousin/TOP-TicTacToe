@@ -81,8 +81,14 @@ const gameBoard = (() => {
     displayController.updateGameBoardDisplay(
       displayController.getBoxes()[i].dataset.index
     );
-
+    checkForAWinner();
+    if (getWInnerIs() != "") {
+      setTimeout(displayController.displayWinnerContent, 200);
+    }
     setTimeout(() => {
+      if (getWInnerIs() !== "") {
+        return;
+      }
       let computerChoice = computerPlay();
       setBoardValues(computerChoice, "player2");
       setPlayerTurn(player1.getPlayerNumber());
@@ -91,7 +97,7 @@ const gameBoard = (() => {
       if (getWInnerIs() != "") {
         setTimeout(displayController.displayWinnerContent, 200);
       }
-    }, 2000);
+    }, 1000);
   };
   const playMultiplayerTurn = (i) => {
     if (
@@ -117,7 +123,12 @@ const gameBoard = (() => {
     }
   };
   const computerPlay = () => {
-    return 0;
+    let computerChoice;
+    do {
+      computerChoice = Math.floor(Math.random() * 9);
+    } while (getBoardValues(computerChoice) !== "");
+    console.log(computerChoice);
+    return computerChoice;
   };
   const checkForAWinner = () => {
     _searchWinnerInArrayGameBoard(0, 1, 2);

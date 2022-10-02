@@ -71,10 +71,22 @@
           <button id="soloButton" class="gameModeButton">Solo</button>
           <button id="multiButton" class="gameModeButton">Multijoueur</button>
         </div>
+        <div id="iaDifficultyContainer" class="notDisplay">
+          <div id="iaDifficultyButtonsContainer">
+            <button id="easyButton" class="iaDifficultybutton">Facile</button>
+            <button id="normalButton" class="iaDifficultybutton">
+              Normale
+            </button>
+            <button id="hardButton" class="iaDifficultybutton">
+              Difficile
+            </button>
+          </div>
+        </div>
         <div class="confirmAvatarChoiceButtonContainer">
           <button id="confirmAvatarChoiceButton">Jouer</button>
         </div>
       </section>
+
       <section id="gameContainer" class="notDisplay">
         <div id="gameBoardContainer">
           <div class="box" data-index="0"></div>
@@ -89,11 +101,11 @@
         </div>
 
         <div class="inGameScoreContainer">
-          <div>Joueur 1</div>
+          <div class="player1Score">Joueur 1</div>
           <div id="player1ScoreContainer">0</div>
           <div>-</div>
           <div id="player2ScoreContainer">0</div>
-          <div>Joueur 2</div>
+          <div class="player2Score">Joueur 2</div>
         </div>
         <div id="inGameButtonsContainer">
           <button id="replayButton">Rejouer</button>

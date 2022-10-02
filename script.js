@@ -65,6 +65,7 @@ const gameBoard = (() => {
     }
   };
   const setGameMode = (mode) => {
+    _gameMode = "";
     _gameMode = mode;
   };
   const getGameMode = () => {
@@ -111,7 +112,19 @@ const gameBoard = (() => {
       if (getWInnerIs() !== "") {
         return;
       }
-      let computerChoice = computerEasyPlay();
+      let computerChoice;
+      switch (gameBoard.getIADifficulty()) {
+        case "easy":
+          computerChoice = computerEasyPlay();
+          break;
+        case "normal":
+          computerChoice = computerNormalPlay();
+          break;
+        case "hard":
+          computerChoice = computerHardPlay();
+          break;
+      }
+
       setBoardValues(computerChoice, "player2");
       setPlayerTurn(player1.getPlayerNumber());
       displayController.updateGameBoardDisplay(computerChoice);
@@ -121,7 +134,7 @@ const gameBoard = (() => {
         setTimeout(updatePlayerScore, 200);
         setTimeout(displayController.updatePlayerScoreDisplay, 200);
       }
-    }, 1000);
+    }, 500);
   };
   const playMultiplayerTurn = (i) => {
     if (
@@ -156,6 +169,7 @@ const gameBoard = (() => {
     return computerChoice;
   };
   const computerNormalPlay = () => {};
+  const computerHardPlay = () => {};
   const checkForAWinner = () => {
     _searchWinnerInArrayGameBoard(0, 1, 2);
     _searchWinnerInArrayGameBoard(3, 4, 5);
@@ -195,12 +209,15 @@ const gameBoard = (() => {
     player2.setPlayerScore(0);
     displayController.updatePlayerScoreDisplay();
     setGameMode("");
+    setIADifficulty("");
   };
   return {
     player1,
     player2,
     setGameMode,
     getGameMode,
+    setIADifficulty,
+    getIADifficulty,
     getBoardValues,
     setBoardValues,
     getPlayerTurn,
@@ -230,6 +247,12 @@ const displayController = (() => {
   );
   const _soloButton = document.querySelector("#soloButton");
   const _multiButton = document.querySelector("#multiButton");
+  const _iaDifficultyContainer = document.querySelector(
+    "#iaDifficultyContainer"
+  );
+  const _easyButton = document.querySelector("#easyButton");
+  const _normalButton = document.querySelector("#normalButton");
+  const _hardButton = document.querySelector("#hardButton");
   const _confirmAvatarChoiceButton = document.querySelector(
     "#confirmAvatarChoiceButton"
   );
@@ -340,6 +363,7 @@ const displayController = (() => {
       _soloButton.classList.add("gameModeButtonSelected");
       _multiButton.classList.remove("gameModeButtonSelected");
       _multiButton.classList.add("notSelected");
+      _iaDifficultyContainer.classList.remove("notDisplay");
     });
     _multiButton.addEventListener("click", () => {
       gameBoard.setGameMode("multi");
@@ -347,6 +371,34 @@ const displayController = (() => {
       _multiButton.classList.add("gameModeButtonSelected");
       _soloButton.classList.remove("gameModeButtonSelected");
       _soloButton.classList.add("notSelected");
+      _iaDifficultyContainer.classList.add("notDisplay");
+    });
+    _easyButton.addEventListener("click", () => {
+      gameBoard.setIADifficulty("easy");
+      _easyButton.classList.remove("notSelected");
+      _easyButton.classList.add("iaDifficultybuttonSelected");
+      _normalButton.classList.remove("iaDifficultybuttonSelected");
+      _normalButton.classList.add("notSelected");
+      _hardButton.classList.remove("iaDifficultybuttonSelected");
+      _hardButton.classList.add("notSelected");
+    });
+    _normalButton.addEventListener("click", () => {
+      gameBoard.setIADifficulty("normal");
+      _normalButton.classList.remove("notSelected");
+      _normalButton.classList.add("iaDifficultybuttonSelected");
+      _easyButton.classList.remove("iaDifficultybuttonSelected");
+      _easyButton.classList.add("notSelected");
+      _hardButton.classList.remove("iaDifficultybuttonSelected");
+      _hardButton.classList.add("notSelected");
+    });
+    _hardButton.addEventListener("click", () => {
+      gameBoard.setIADifficulty("hard");
+      _hardButton.classList.remove("notSelected");
+      _hardButton.classList.add("iaDifficultybuttonSelected");
+      _easyButton.classList.remove("iaDifficultybuttonSelected");
+      _easyButton.classList.add("notSelected");
+      _normalButton.classList.remove("iaDifficultybuttonSelected");
+      _normalButton.classList.add("notSelected");
     });
     _confirmAvatarChoiceButton.addEventListener("click", () => {
       if (
@@ -354,6 +406,12 @@ const displayController = (() => {
         gameBoard.player2.getPlayerAvatar() != "" &&
         gameBoard.getGameMode() != ""
       ) {
+        if (
+          gameBoard.getGameMode() === "solo" &&
+          gameBoard.getIADifficulty() === ""
+        ) {
+          return;
+        }
         _avatarSelectionContainer.classList.add("notDisplay");
         _gameContainer.classList.remove("notDisplay");
       }
@@ -391,6 +449,13 @@ const displayController = (() => {
       _soloButton.classList.remove("gameModeButtonSelected");
       _multiButton.classList.remove("gameModeButtonSelected");
       _multiButton.classList.remove("notSelected");
+      _iaDifficultyContainer.classList.add("notDisplay");
+      _easyButton.classList.remove("iaDifficultybuttonSelected");
+      _easyButton.classList.remove("notSelected");
+      _normalButton.classList.remove("iaDifficultybuttonSelected");
+      _normalButton.classList.remove("notSelected");
+      _hardButton.classList.remove("iaDifficultybuttonSelected");
+      _hardButton.classList.remove("notSelected");
       _refreshGameBoardDisplay();
     });
   };

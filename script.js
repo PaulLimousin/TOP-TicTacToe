@@ -3,6 +3,7 @@
 // Players
 const Player = (playerNumber) => {
   let _avatar = "";
+  let _playerScore = 0;
   const getPlayerNumber = () => {
     return playerNumber;
   };
@@ -12,8 +13,20 @@ const Player = (playerNumber) => {
   const getPlayerAvatar = () => {
     return _avatar;
   };
+  const setPlayerScore = (playerScore) => {
+    _playerScore = playerScore;
+  };
+  const getPlayerScore = () => {
+    return _playerScore;
+  };
 
-  return { getPlayerNumber, setPlayerAvatar, getPlayerAvatar };
+  return {
+    getPlayerNumber,
+    setPlayerAvatar,
+    getPlayerAvatar,
+    setPlayerScore,
+    getPlayerScore,
+  };
 };
 
 // Gameboard
@@ -91,6 +104,8 @@ const gameBoard = (() => {
     checkForAWinner();
     if (getWInnerIs() != "") {
       setTimeout(displayController.displayWinnerContent, 200);
+      setTimeout(updatePlayerScore, 200);
+      setTimeout(displayController.updatePlayerScoreDisplay, 200);
     }
     setTimeout(() => {
       if (getWInnerIs() !== "") {
@@ -103,6 +118,8 @@ const gameBoard = (() => {
       checkForAWinner();
       if (getWInnerIs() != "") {
         setTimeout(displayController.displayWinnerContent, 200);
+        setTimeout(updatePlayerScore, 200);
+        setTimeout(displayController.updatePlayerScoreDisplay, 200);
       }
     }, 1000);
   };
@@ -127,6 +144,8 @@ const gameBoard = (() => {
     checkForAWinner();
     if (getWInnerIs() != "") {
       setTimeout(displayController.displayWinnerContent, 200);
+      setTimeout(updatePlayerScore, 200);
+      setTimeout(displayController.updatePlayerScoreDisplay, 200);
     }
   };
   const computerEasyPlay = () => {
@@ -136,9 +155,7 @@ const gameBoard = (() => {
     } while (getBoardValues(computerChoice) !== "");
     return computerChoice;
   };
-  const computerNormalPlay = () => {
-    
-  };
+  const computerNormalPlay = () => {};
   const checkForAWinner = () => {
     _searchWinnerInArrayGameBoard(0, 1, 2);
     _searchWinnerInArrayGameBoard(3, 4, 5);
@@ -153,6 +170,15 @@ const gameBoard = (() => {
   const getWInnerIs = () => {
     return _winnerIs;
   };
+  const updatePlayerScore = () => {
+    if (_winnerIs === "player1") {
+      let newScore = player1.getPlayerScore() + 1;
+      player1.setPlayerScore(newScore);
+    } else if (_winnerIs === "player2") {
+      let newScore = player2.getPlayerScore() + 1;
+      player2.setPlayerScore(newScore);
+    }
+  };
   const replayGame = () => {
     for (let i = 0; i < _board.length; i++) {
       _board[i] = "";
@@ -165,6 +191,9 @@ const gameBoard = (() => {
     replayGame();
     player1.setPlayerAvatar("");
     player2.setPlayerAvatar("");
+    player1.setPlayerScore(0);
+    player2.setPlayerScore(0);
+    displayController.updatePlayerScoreDisplay();
     setGameMode("");
   };
   return {
@@ -181,6 +210,7 @@ const gameBoard = (() => {
     playSoloTurn,
     checkForAWinner,
     getWInnerIs,
+    updatePlayerScore,
     replayGame,
     resetGame,
   };
@@ -204,6 +234,12 @@ const displayController = (() => {
     "#confirmAvatarChoiceButton"
   );
   const _gameContainer = document.querySelector("#gameContainer");
+  const _player1ScoreContainer = document.querySelector(
+    "#player1ScoreContainer"
+  );
+  const _player2ScoreContainer = document.querySelector(
+    "#player2ScoreContainer"
+  );
   const _replayButton = document.querySelector("#replayButton");
   const _resetButton = document.querySelector("#_resetButton");
 
@@ -247,6 +283,10 @@ const displayController = (() => {
     for (let i = 0; i < 3; i++) {
       _boxes[winnerBoxes[i]].lastChild.classList.add("winImage");
     }
+  };
+  const updatePlayerScoreDisplay = () => {
+    _player1ScoreContainer.textContent = gameBoard.player1.getPlayerScore();
+    _player2ScoreContainer.textContent = gameBoard.player2.getPlayerScore();
   };
   const _refreshGameBoardDisplay = () => {
     for (let i = 0; i < _boxes.length; i++) {
@@ -327,7 +367,6 @@ const displayController = (() => {
           gameBoard.playSoloTurn(i);
         } else if (gameBoard.getGameMode() === "multi") {
           gameBoard.playMultiplayerTurn(i);
-          
         }
       });
     }
@@ -337,6 +376,7 @@ const displayController = (() => {
     });
     _resetButton.addEventListener("click", () => {
       gameBoard.resetGame();
+
       _gameContainer.classList.add("notDisplay");
       _avatarSelectionContainer.classList.remove("notDisplay");
       for (let i = 0; i < _avatarChoicesPlayer1.length; i++) {
@@ -355,5 +395,10 @@ const displayController = (() => {
     });
   };
   _listenersSettings();
-  return { getBoxes, updateGameBoardDisplay, displayWinnerContent };
+  return {
+    getBoxes,
+    updateGameBoardDisplay,
+    displayWinnerContent,
+    updatePlayerScoreDisplay,
+  };
 })();

@@ -36,20 +36,26 @@ h1 {
   font-weight: bold;
   font-family: "Bungee Spice", cursive;
 }
+h1:hover {
+  cursor: default;
+}
 h2 {
   font-size: 2.5rem;
+}
+h2:hover {
+  cursor: default;
 }
 .playerChoiceContainer {
   display: flex;
   justify-content: space-around;
 }
 .player1 {
-  border: 4px solid blue;
+  border: 4px solid goldenrod;
   border-radius: 20px;
   padding: 10px 20px;
 }
 .player2 {
-  border: 4px solid red;
+  border: 4px solid goldenrod;
   border-radius: 20px;
   padding: 10px 20px;
 }
@@ -66,22 +72,22 @@ h2 {
   cursor: pointer;
 }
 .avatarChoicePlayer1:hover {
-  border: 4px solid blue;
+  border: 4px solid rgb(0, 0, 190);
   border-radius: 50%;
   box-sizing: border-box;
 }
 .avatarChoicePlayer2:hover {
-  border: 4px solid red;
+  border: 4px solid rgb(170, 0, 0);
   border-radius: 50%;
   box-sizing: border-box;
 }
 .selectedPlayer1 {
-  border: 4px solid blue;
+  border: 4px solid rgb(0, 0, 190);
   border-radius: 50%;
   box-sizing: border-box;
 }
 .selectedPlayer2 {
-  border: 4px solid red;
+  border: 4px solid rgb(170, 0, 0);
   border-radius: 50%;
   box-sizing: border-box;
 }
@@ -124,9 +130,11 @@ h2 {
   cursor: pointer;
   margin-bottom: 10px;
   background-color: goldenrod;
+  color: white;
 }
 #confirmAvatarChoiceButton:hover {
   filter: brightness(90%);
+  color: black;
 }
 /* ****************** GAMEBOARD ****************** */
 #gameBoardContainer {
@@ -178,4 +186,17 @@ h2 {
 #replayButton:hover,
 #_resetButton:hover {
   filter: brightness(90%);
+}
+.inGameScoreContainer {
+  background-color: #f2f2f2e5;
+  border-radius: 5px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 30px;
+}
+.inGameScoreContainer div {
+  font-weight: bold;
+  font-size: 1.2rem;
+  cursor: default;
 }

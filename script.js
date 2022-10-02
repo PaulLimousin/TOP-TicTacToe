@@ -22,6 +22,7 @@ const gameBoard = (() => {
   const player2 = Player("player2");
   const _board = ["", "", "", "", "", "", "", "", ""];
   let _gameMode = "";
+  let _iaDifficulty = "";
   let _winnerIs = "";
   let _winnerBoxes = [];
   let _playerTurn = player1.getPlayerNumber();
@@ -56,6 +57,12 @@ const gameBoard = (() => {
   const getGameMode = () => {
     return _gameMode;
   };
+  const setIADifficulty = (difficulty) => {
+    _iaDifficulty = difficulty;
+  };
+  const getIADifficulty = () => {
+    return _iaDifficulty;
+  };
   const getBoardValues = (index) => {
     return _board[index];
   };
@@ -89,7 +96,7 @@ const gameBoard = (() => {
       if (getWInnerIs() !== "") {
         return;
       }
-      let computerChoice = computerPlay();
+      let computerChoice = computerEasyPlay();
       setBoardValues(computerChoice, "player2");
       setPlayerTurn(player1.getPlayerNumber());
       displayController.updateGameBoardDisplay(computerChoice);
@@ -122,13 +129,15 @@ const gameBoard = (() => {
       setTimeout(displayController.displayWinnerContent, 200);
     }
   };
-  const computerPlay = () => {
+  const computerEasyPlay = () => {
     let computerChoice;
     do {
       computerChoice = Math.floor(Math.random() * 9);
     } while (getBoardValues(computerChoice) !== "");
-    console.log(computerChoice);
     return computerChoice;
+  };
+  const computerNormalPlay = () => {
+    
   };
   const checkForAWinner = () => {
     _searchWinnerInArrayGameBoard(0, 1, 2);
@@ -318,6 +327,7 @@ const displayController = (() => {
           gameBoard.playSoloTurn(i);
         } else if (gameBoard.getGameMode() === "multi") {
           gameBoard.playMultiplayerTurn(i);
+          
         }
       });
     }

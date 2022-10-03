@@ -204,6 +204,12 @@ h2:hover {
 .player2Score {
   color: rgb(170, 0, 0);
 }
+#player1ScoreContainer {
+  color: goldenrod;
+}
+#player2ScoreContainer {
+  color: goldenrod;
+}
 #replayButton,
 #_resetButton {
   border: 2px solid black;

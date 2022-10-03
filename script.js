@@ -112,6 +112,15 @@ const gameBoard = (() => {
       if (getWInnerIs() !== "") {
         return;
       }
+      let _gameFinished = true;
+      for (let i = 0; i < _board.length; i++) {
+        if (_board[i] === "") {
+          _gameFinished = false;
+        }
+      }
+      if (_gameFinished === true) {
+        return;
+      }
       let computerChoice;
       switch (gameBoard.getIADifficulty()) {
         case "easy":
@@ -168,7 +177,228 @@ const gameBoard = (() => {
     } while (getBoardValues(computerChoice) !== "");
     return computerChoice;
   };
-  const computerNormalPlay = () => {};
+  const computerNormalPlay = () => {
+    let computerChoice;
+
+    // Défendre et attaquer
+    // Ligne 1
+    if (
+      getBoardValues(0) === getBoardValues(1) &&
+      getBoardValues(0) != "" &&
+      getBoardValues(2) === ""
+    ) {
+      computerChoice = 2;
+      return computerChoice;
+    } else if (
+      getBoardValues(1) === getBoardValues(2) &&
+      getBoardValues(1) != "" &&
+      getBoardValues(0) === ""
+    ) {
+      computerChoice = 0;
+      return computerChoice;
+    } else if (
+      getBoardValues(0) === getBoardValues(2) &&
+      getBoardValues(0) != "" &&
+      getBoardValues(1) === ""
+    ) {
+      computerChoice = 1;
+      return computerChoice;
+    }
+    // Ligne 2
+    if (
+      getBoardValues(3) === getBoardValues(4) &&
+      getBoardValues(3) != "" &&
+      getBoardValues(5) === ""
+    ) {
+      computerChoice = 5;
+      return computerChoice;
+    } else if (
+      getBoardValues(4) === getBoardValues(5) &&
+      getBoardValues(4) != "" &&
+      getBoardValues(3) === ""
+    ) {
+      computerChoice = 3;
+      return computerChoice;
+    } else if (
+      getBoardValues(3) === getBoardValues(5) &&
+      getBoardValues(3) != "" &&
+      getBoardValues(4) === ""
+    ) {
+      computerChoice = 4;
+      return computerChoice;
+    }
+    // Ligne 3
+    if (
+      getBoardValues(6) === getBoardValues(7) &&
+      getBoardValues(6) != "" &&
+      getBoardValues(8) === ""
+    ) {
+      computerChoice = 8;
+      return computerChoice;
+    } else if (
+      getBoardValues(7) === getBoardValues(8) &&
+      getBoardValues(7) != "" &&
+      getBoardValues(6) === ""
+    ) {
+      computerChoice = 6;
+      return computerChoice;
+    } else if (
+      getBoardValues(6) === getBoardValues(8) &&
+      getBoardValues(6) != "" &&
+      getBoardValues(7) === ""
+    ) {
+      computerChoice = 7;
+      return computerChoice;
+    }
+    // Colonne 1
+    if (
+      getBoardValues(0) === getBoardValues(3) &&
+      getBoardValues(0) != "" &&
+      getBoardValues(6) === ""
+    ) {
+      computerChoice = 6;
+      return computerChoice;
+    } else if (
+      getBoardValues(3) === getBoardValues(6) &&
+      getBoardValues(3) != "" &&
+      getBoardValues(0) === ""
+    ) {
+      computerChoice = 0;
+      return computerChoice;
+    } else if (
+      getBoardValues(0) === getBoardValues(6) &&
+      getBoardValues(0) != "" &&
+      getBoardValues(3) === ""
+    ) {
+      computerChoice = 3;
+      return computerChoice;
+    }
+    // Colonne 2
+    if (
+      getBoardValues(1) === getBoardValues(4) &&
+      getBoardValues(1) != "" &&
+      getBoardValues(7) === ""
+    ) {
+      computerChoice = 7;
+      return computerChoice;
+    } else if (
+      getBoardValues(1) === getBoardValues(7) &&
+      getBoardValues(1) != "" &&
+      getBoardValues(4) === ""
+    ) {
+      computerChoice = 4;
+      return computerChoice;
+    } else if (
+      getBoardValues(4) === getBoardValues(7) &&
+      getBoardValues(4) != "" &&
+      getBoardValues(1) === ""
+    ) {
+      computerChoice = 1;
+      return computerChoice;
+    }
+    // Colonne 3
+    if (
+      getBoardValues(2) === getBoardValues(5) &&
+      getBoardValues(2) != "" &&
+      getBoardValues(8) === ""
+    ) {
+      computerChoice = 8;
+      return computerChoice;
+    } else if (
+      getBoardValues(2) === getBoardValues(8) &&
+      getBoardValues(2) != "" &&
+      getBoardValues(5) === ""
+    ) {
+      computerChoice = 5;
+      return computerChoice;
+    } else if (
+      getBoardValues(5) === getBoardValues(8) &&
+      getBoardValues(5) != "" &&
+      getBoardValues(2) === ""
+    ) {
+      computerChoice = 2;
+      return computerChoice;
+    }
+    // Diagonale 1
+    if (
+      getBoardValues(0) === getBoardValues(4) &&
+      getBoardValues(0) != "" &&
+      getBoardValues(8) === ""
+    ) {
+      computerChoice = 8;
+      return computerChoice;
+    } else if (
+      getBoardValues(0) === getBoardValues(8) &&
+      getBoardValues(0) != "" &&
+      getBoardValues(4) === ""
+    ) {
+      computerChoice = 4;
+      return computerChoice;
+    } else if (
+      getBoardValues(4) === getBoardValues(8) &&
+      getBoardValues(4) != "" &&
+      getBoardValues(0) === ""
+    ) {
+      computerChoice = 0;
+      return computerChoice;
+    }
+    // Diagonale 2
+    if (
+      getBoardValues(2) === getBoardValues(4) &&
+      getBoardValues(2) != "" &&
+      getBoardValues(6) === ""
+    ) {
+      computerChoice = 6;
+      return computerChoice;
+    } else if (
+      getBoardValues(2) === getBoardValues(6) &&
+      getBoardValues(2) != "" &&
+      getBoardValues(4) === ""
+    ) {
+      computerChoice = 4;
+      return computerChoice;
+    } else if (
+      getBoardValues(4) === getBoardValues(6) &&
+      getBoardValues(4) != "" &&
+      getBoardValues(2) === ""
+    ) {
+      computerChoice = 2;
+      return computerChoice;
+    }
+
+    // Mettre un pion au centre
+    if (getBoardValues(4) === "") {
+      computerChoice = 4;
+      return computerChoice;
+    }
+    // Mettre un pion sur les cotés
+    if (
+      getBoardValues(0) === "" ||
+      getBoardValues(2) === "" ||
+      getBoardValues(6) === "" ||
+      getBoardValues(8) === ""
+    ) {
+      do {
+        let randomCornerChoice = Math.floor(Math.random() * 4);
+        if (randomCornerChoice === 0) {
+          computerChoice = 0;
+        } else if (randomCornerChoice === 1) {
+          computerChoice = 2;
+        } else if (randomCornerChoice === 2) {
+          computerChoice = 6;
+        } else if (randomCornerChoice === 3) {
+          computerChoice = 8;
+        }
+      } while (getBoardValues(computerChoice) !== "");
+      return computerChoice;
+    }
+
+    // Dernière possibilité
+    do {
+      computerChoice = Math.floor(Math.random() * 9);
+    } while (getBoardValues(computerChoice) !== "");
+    return computerChoice;
+  };
   const computerHardPlay = () => {};
   const checkForAWinner = () => {
     _searchWinnerInArrayGameBoard(0, 1, 2);

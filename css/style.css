@@ -141,6 +141,13 @@ h2:hover {
 .iaDifficultybuttonSelected {
   border: 3px solid goldenrod;
 }
+#hardWarningContainer {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  color: rgb(170, 0, 0);
+}
 .confirmAvatarChoiceButtonContainer {
   display: flex;
   justify-content: center;

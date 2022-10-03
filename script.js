@@ -483,6 +483,7 @@ const displayController = (() => {
   const _easyButton = document.querySelector("#easyButton");
   const _normalButton = document.querySelector("#normalButton");
   const _hardButton = document.querySelector("#hardButton");
+  const _hardWarningContainer = document.querySelector("#hardWarningContainer");
   const _confirmAvatarChoiceButton = document.querySelector(
     "#confirmAvatarChoiceButton"
   );
@@ -611,6 +612,7 @@ const displayController = (() => {
       _normalButton.classList.add("notSelected");
       _hardButton.classList.remove("iaDifficultybuttonSelected");
       _hardButton.classList.add("notSelected");
+      _hardWarningContainer.classList.add("notDisplay");
     });
     _normalButton.addEventListener("click", () => {
       gameBoard.setIADifficulty("normal");
@@ -620,15 +622,17 @@ const displayController = (() => {
       _easyButton.classList.add("notSelected");
       _hardButton.classList.remove("iaDifficultybuttonSelected");
       _hardButton.classList.add("notSelected");
+      _hardWarningContainer.classList.add("notDisplay");
     });
     _hardButton.addEventListener("click", () => {
-      gameBoard.setIADifficulty("hard");
+      gameBoard.setIADifficulty("");
       _hardButton.classList.remove("notSelected");
       _hardButton.classList.add("iaDifficultybuttonSelected");
       _easyButton.classList.remove("iaDifficultybuttonSelected");
       _easyButton.classList.add("notSelected");
       _normalButton.classList.remove("iaDifficultybuttonSelected");
       _normalButton.classList.add("notSelected");
+      _hardWarningContainer.classList.remove("notDisplay");
     });
     _confirmAvatarChoiceButton.addEventListener("click", () => {
       if (
@@ -686,6 +690,7 @@ const displayController = (() => {
       _normalButton.classList.remove("notSelected");
       _hardButton.classList.remove("iaDifficultybuttonSelected");
       _hardButton.classList.remove("notSelected");
+      _hardWarningContainer.classList.add("notDisplay");
       _refreshGameBoardDisplay();
     });
   };
